@@ -372,15 +372,55 @@
             "there's no use in crying over spilled buttermilk"
         ];
 
-        function getRandomPhrase(array) {
-            return array[Math.floor(Math.random() * array.length)];
+        // Track used phrases for each column
+        let usedPhrases = {
+            column1: [],
+            column2: [],
+            column3: []
+        };
+
+        // Reset used phrases when all phrases in a column have been used
+        function resetUsedPhrases(column) {
+            usedPhrases[column] = [];
         }
 
+        // Get a random phrase that hasn't been used recently
+        function getRandomPhrase(phrases, column) {
+            // If all phrases have been used, reset the used phrases for this column
+            if (usedPhrases[column].length >= phrases.length) {
+                resetUsedPhrases(column);
+            }
+
+            // Get available phrases (those not in usedPhrases)
+            const availablePhrases = phrases.filter(phrase => !usedPhrases[column].includes(phrase));
+            
+            // Get random phrase from available phrases
+            const randomIndex = Math.floor(Math.random() * availablePhrases.length);
+            const selectedPhrase = availablePhrases[randomIndex];
+            
+            // Add to used phrases
+            usedPhrases[column].push(selectedPhrase);
+            
+            return selectedPhrase;
+        }
+
+        // Function to generate a random response
         function generateResponse() {
-            const phrase1 = getRandomPhrase(column1);
-            const phrase2 = getRandomPhrase(column2);
-            const phrase3 = getRandomPhrase(column3);
-            return `${phrase1} ${phrase2} ${phrase3}`;
+            // Get random phrases from each column
+            const phrase1 = getRandomPhrase(column1, 'column1');
+            const phrase2 = getRandomPhrase(column2, 'column2');
+            const phrase3 = getRandomPhrase(column3, 'column3');
+
+            // Convert first letter of phrase1 to lowercase since it follows "Well, "
+            const lowercasePhrase1 = phrase1.charAt(0).toLowerCase() + phrase1.slice(1);
+
+            // Combine phrases with "Well, " at the start, a comma between phrase2 and phrase3, and a period at the end
+            const response = `Well, ${lowercasePhrase1} ${phrase2}, ${phrase3}.`;
+            
+            // Display the response
+            const resultBox = document.getElementById('answer');
+            resultBox.textContent = response;
+            resultBox.style.display = 'block';
         }
 
         function shakeBall() {
@@ -393,11 +433,10 @@
             answer.classList.remove('show');
             
             // Get random response
-            const randomResponse = generateResponse();
+            generateResponse();
             
             // Show new answer after animation
             setTimeout(() => {
-                answer.textContent = randomResponse;
                 answer.classList.add('show');
                 answer.classList.remove('shake');
             }, 500);
@@ -407,6 +446,8 @@
             const questionInput = document.getElementById('question');
             if (questionInput.value.trim() !== '') {
                 shakeBall();
+            } else {
+                alert('Please enter a question first!');
             }
         }
 
