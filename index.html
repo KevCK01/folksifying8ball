@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rick Rubin Haiku Generator</title>
+    <title>Folksifying 8 Ball</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,40 +13,30 @@
             justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            background-image: url('rick.png');
+            background-image: url('8ballbackground.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            padding-top: 15vh;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.3);
-            z-index: -1;
+            padding-top: 2rem;
         }
 
         h1 {
-            color: #ffffff;
-            margin-bottom: 3rem;
+            color: white;
+            margin-bottom: 1.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-size: 2.5rem;
-            position: relative;
-            z-index: 1;
         }
 
         .result-section {
-            margin-bottom: 3rem;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            padding: 0.5rem;
+            margin: 1rem 0;
+            width: 300px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         .button-container {
@@ -54,36 +44,33 @@
             gap: 1rem;
             justify-content: center;
             margin: 1rem 0;
-            position: relative;
-            z-index: 1;
         }
 
         button {
-            padding: 0.8rem 1.5rem;
-            font-size: 1.2rem;
-            background-color: #4a4a4a;
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            background-color: rgba(76, 175, 80, 0.9);
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             flex: 1;
-            max-width: 200px;
+            max-width: 150px;
         }
 
         button:hover {
-            background-color: #666666;
+            background-color: rgba(69, 160, 73, 0.9);
         }
 
         .result-box {
             margin: 0 auto;
-            padding: 2.5rem;
-            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
             border-radius: 10px;
-            min-height: 200px;
+            min-height: 120px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
@@ -92,18 +79,12 @@
             width: 90%;
             max-width: 700px;
             text-align: center;
-            line-height: 1.8;
+            line-height: 1.4;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
         }
 
         .result-box.show {
             opacity: 1;
-        }
-
-        .haiku-line {
-            margin: 0.5rem 0;
-            font-style: italic;
         }
 
         .shake {
@@ -120,130 +101,363 @@
     </style>
 </head>
 <body>
+    <h1>Folksifying 8 Ball</h1>
+    
     <div class="result-section">
         <div class="result-box" id="answer"></div>
     </div>
 
-    <div class="button-container">
-        <button onclick="generateHaiku()">Generate Haiku</button>
+    <div class="input-section">
+        <input type="text" id="question" placeholder="Ask a question...">
+        <div class="button-container">
+            <button onclick="shakeBall()">Shake It!</button>
+            <button onclick="askQuestion()">Ask It</button>
+        </div>
     </div>
 
-    <h1>Rick Rubin Haiku Generator</h1>
-
     <script>
-        // First lines (5 syllables)
-        const firstLines = [
-            "Strip away the noise",
-            "Empty studio,",
-            "Beard holds ancient words,",
-            "Morning meditation:",
-            "Barefoot on the floor,",
-            "The artist argues,",
-            "Analog warmth flows",
-            "Cross-legged, I listen",
-            "Delete the extra,",
-            "Sunset through the glass,",
-            "Trust the first instinct,",
-            "The drummer rushes,",
-            "Incense burns slowly,",
-            "Remove another track,",
-            "The singer trembles,",
-            "Ancient wisdom speaks",
-            "Closed eyes, open heart,",
-            "Nature's rhythm calls",
-            "The take sounds perfect,",
-            "Meditation bell"
+        // GitHub Pages rebuild trigger
+        const column1 = [
+            "If a bullfrog in Sunday shoes",
+            "When your second cousin twice removed",
+            "Every time my grandma's old hound dog",
+            "The second the town mayor with a toupee",
+            "Whenever the church mouse",
+            "The minute the choir director with a cold",
+            "If a squirrel with two acorns",
+            "As soon as the mailman with a trick knee",
+            "The moment the deacon's cow",
+            "First time a catfish swimming upstream",
+            "Just when my neighbor who collects thimbles",
+            "Each time a snake in a rocking chair",
+            "The day your unmarried aunt",
+            "Once the volunteer firefighter with a mustache",
+            "The instant a honeybee in winter",
+            "If Uncle Jeb after three whiskeys",
+            "When a mule wearing spectacles",
+            "Every time Pastor Smith during a thunderstorm",
+            "The second a fox in the henhouse",
+            "Whenever the widow Jackson in her Sunday hat",
+            "The minute the bank teller with a stutter",
+            "If my aunt's third husband",
+            "As soon as the town drunk at the baptism",
+            "The moment the Sunday school teacher with a sweet tooth",
+            "First time a one-eyed groundhog",
+            "Just when the funeral director in dancing shoes",
+            "Each time the high school principal",
+            "The day a ladybug on a picket fence",
+            "Once the tax collector with a head cold",
+            "The instant the grocery store clerk with a glass eye",
+            "If the schoolteacher during a full moon",
+            "When a coyote with a limp",
+            "Every time the town gossip at the hair salon",
+            "The second the postmaster's daughter",
+            "Whenever a sparrow in the butter churn",
+            "The minute the choir soprano with a secret",
+            "If the town librarian after hours",
+            "As soon as Miss Mabel's canary",
+            "The moment the visiting preacher from up north",
+            "First time a hedgehog covered in honey",
+            "Just when the undertaker's apprentice",
+            "Each time the courthouse janitor",
+            "The day a billy goat with a banjo",
+            "Once the blacksmith with arthritis",
+            "The instant a butterfly on a rifle barrel",
+            "If the barber with shaky hands",
+            "When the milkman's teenage son",
+            "Every time the pharmacist with a secret recipe",
+            "The second my daddy after a long day fishing",
+            "Whenever your mother-in-law in the kitchen",
+            "The minute a badger in the butter",
+            "If Cousin Elmer during a full moon",
+            "As soon as the organ player with a hangover",
+            "The moment a hawk in the wash basin",
+            "First time the church treasurer after collection",
+            "Just when a mockingbird on the telephone wire",
+            "Each time the butcher with reading glasses",
+            "The day the preacher's wife at bingo night",
+            "Once an armadillo on the doorstep",
+            "The instant your brother-in-law at Thanksgiving dinner",
+            "If a cardinal on the clothesline",
+            "When the Angel Gabriel on a Tuesday",
+            "Every time the sheriff with a toothache",
+            "The second a spider in the baptismal water",
+            "Whenever the town doctor after hours",
+            "The minute a hornet in the outhouse",
+            "If the railroad conductor on Sunday morning",
+            "As soon as a worm in the wedding cake",
+            "The moment a skunk at the family reunion",
+            "First time your teenage daughter with car keys",
+            "Just when the town judge at the county fair",
+            "Each time a lizard in the lemonade",
+            "The day the lottery winner from three counties over",
+            "Once a raccoon in the rocking chair",
+            "The instant the bride's father before the wedding",
+            "If a turkey with a pocket calendar",
+            "When the church elder with a sweet tooth",
+            "Every time a snake in the soup pot",
+            "The second the new schoolteacher from the city",
+            "Whenever the midwife after a long night",
+            "The minute your uncle who fought in the war",
+            "If a lamb in the library",
+            "As soon as the moonshiner's daughter",
+            "The moment the traveling salesman at your door",
+            "First time a walleye in the washtub",
+            "Just when the town spinster at the dance",
+            "Each time the Sunday school superintendent",
+            "The day a bumblebee in the breadbox",
+            "Once the choir boy with a frog in his pocket",
+            "The instant the circuit-riding preacher",
+            "If the town mechanic covered in grease",
+            "When the deacon's wife with a secret recipe",
+            "Every time the bachelor farmer next door",
+            "The second the piano teacher with arthritic fingers",
+            "Whenever the town busybody with binoculars",
+            "The minute a pig with a paintbrush",
+            "If the bank president at the fishing hole",
+            "As soon as your great-aunt with the family Bible",
+            "The moment the old maid with seven cats",
+            "First time the undertaker's daughter in red shoes"
         ];
 
-        // Second lines (7 syllables)
-        const secondLines = [
-            "What remains when silence speaks",
-            "Waiting for the perfect take",
-            "Whispered secrets of the mix",
-            "The fader moves without thought",
-            "Feeling vibrations of sound",
-            "I close my eyes and just breathe",
-            "Through tubes that remember jazz",
-            "To spaces between the beats",
-            "What serves the song stays behind",
-            "Golden hour meets golden ear",
-            "Before the mind interferes",
-            "I shake my head just once",
-            "Smoke rises like reverb trails",
-            "Sometimes less is infinite",
-            "I nod: 'Your fear is perfect'",
-            "Through modern speakers and mics",
-            "The mix reveals its secrets",
-            "From outside the studio",
-            "But perfect isn't alive",
-            "Rings once in the control room"
+        const column2 = [
+            "tries to sing the national anthem",
+            "loses his reading glasses",
+            "starts giving tax advice",
+            "can't find its way to the fishing hole",
+            "borrows your favorite hammer",
+            "shows up late to the potluck",
+            "dances with the sheriff's daughter",
+            "forgets which day is trash day",
+            "starts telling tall tales at the barbershop",
+            "puts on lipstick on a Tuesday",
+            "can't remember where he parked",
+            "tries to climb the water tower",
+            "wears your best Sunday hat",
+            "gets caught in the rain without an umbrella",
+            "starts speaking in riddles",
+            "chases the mailman's bicycle",
+            "steals the collection plate",
+            "eats the last piece of pecan pie",
+            "spills coffee on the church bulletin",
+            "snores during the sermon",
+            "gets stuck in the chimney",
+            "mistakes salt for sugar",
+            "forgets the words to Amazing Grace",
+            "runs out of gas on a country road",
+            "tries to milk a bull",
+            "interrupts the mayor's speech",
+            "sits in Grandma's rocking chair",
+            "drinks from the wrong well",
+            "takes a nap in the vegetable garden",
+            "gets into the moonshine",
+            "learns to play the banjo",
+            "wanders into the wrong barn",
+            "falls asleep at the wedding",
+            "confuses molasses with motor oil",
+            "goes fishing with a tennis racket",
+            "hides the communion wine",
+            "tries to baptize the cat",
+            "dances on the dinner table",
+            "uses the family Bible as a coaster",
+            "attempts to drive the tractor",
+            "brings a skunk to Bible study",
+            "mistakes a wasps' nest for a piñata",
+            "counts chickens before they hatch",
+            "puts salt in the sugar bowl",
+            "loses the church keys",
+            "wears pajamas to the funeral",
+            "falls into the fishing pond",
+            "breaks the last jar of preserves",
+            "mistakes the outhouse for the smokehouse",
+            "sings off-key at the choir practice",
+            "eats all the cookies before the bake sale",
+            "mistakes a beehive for a mailbox",
+            "mistakes a porcupine for a hairbrush",
+            "tracks mud on the clean floor",
+            "runs from a garden hose thinkin' it's a snake",
+            "forgets to close the chicken coop",
+            "puts vinegar in the cake batter",
+            "loses Grandpa's false teeth",
+            "burns the Sunday biscuits",
+            "gets spooked by its own shadow",
+            "rings the church bell at midnight",
+            "trips over a tumbleweed",
+            "puts honey in your boots",
+            "falls asleep in the town meeting",
+            "uses a fishing pole to clean the chimney",
+            "swallows a watermelon seed",
+            "gets tangled in a clothesline",
+            "mistakes a mule for a horse",
+            "goes swimming in the horse trough",
+            "loses the wedding rings",
+            "drinks from the cow's bucket",
+            "brings a frog to the dinner table",
+            "uses a corn cob as a toothbrush",
+            "talks back to the preacher",
+            "hiccups during the prayer",
+            "sleeps through the rooster's crow",
+            "jumps into a pile of cow manure",
+            "gets locked in the cellar",
+            "tries to teach a pig to whistle",
+            "sits on a pincushion",
+            "uses your toothbrush to clean their boots",
+            "steals the last slice of meatloaf",
+            "talks during the Sunday sermon",
+            "tries to rope a tornado",
+            "puts salt in the coffee",
+            "gets chased by a goose",
+            "forgets to pray before eatin'",
+            "tips over the cider barrel",
+            "lights the wrong end of a cigar",
+            "falls asleep in the hayloft",
+            "mistakes a hornet for a hummingbird",
+            "drops the baby in the baptismal",
+            "accidentally feeds the chickens coffee grounds",
+            "digs up your flower garden lookin' for worms",
+            "wears church clothes to go fishing",
+            "tries to play checkers with bottle caps",
+            "mixes north and south",
+            "forgets to put the cow back in the barn",
+            "bakes a pie with the wrong berries",
+            "tries to read by candlelight in a hayloft"
         ];
 
-        // Third lines (5 syllables)
-        const thirdLines = [
-            "Listen to the space",
-            "Let the music breathe",
-            "Trust your intuition",
-            "Feel the rhythm flow",
-            "Find the perfect take",
-            "Let the silence speak",
-            "Hear the truth within",
-            "Trust the process now",
-            "Let the song guide you",
-            "Feel the moment's grace",
-            "Trust the first instinct",
-            "Let the music flow",
-            "Hear the subtle truth",
-            "Feel the energy",
-            "Trust the artist's voice",
-            "Let the moment speak",
-            "Hear the deeper truth",
-            "Feel the music's soul",
-            "Trust the natural flow",
-            "Let the silence guide"
+        const column3 = [
+            "then the cornbread ain't done yet",
+            "you better not count on that mortgage payment",
+            "I reckon don't expect me at the town meeting",
+            "that's when I ain't lending you my ladder no more",
+            "well, Christmas might as well come in July",
+            "you can bet your fishing license is probably expired anyway",
+            "sure as shootin' the whole church choir's gonna hear about it",
+            "you might as well sell that tractor now",
+            "mark my words, I'll be bringing store-bought pie to the funeral",
+            "lord have mercy, I'm not the one to milk your cow",
+            "you know the well's run dry",
+            "I guarantee your barn door's been open too long",
+            "don't come crying to me when your pickles don't ferment",
+            "you can kiss that blue ribbon goodbye",
+            "you better take the long way home",
+            "my butter beans ain't worth the canning",
+            "there's no use putting a new roof on the chicken coop",
+            "might as well sleep in the barn tonight",
+            "the gossip mill will run for a month",
+            "you're barking up the wrong corn stalk",
+            "that's when you know the preacher needs a vacation",
+            "your Sunday shoes ain't ever gonna shine again",
+            "I'll be prayin' for rain on your vegetable garden",
+            "there ain't gonna be gravy on those biscuits",
+            "don't expect me to co-sign your bail",
+            "you can forget about borrowing my good tablecloth",
+            "then we're having leftovers at Thanksgiving dinner",
+            "I'm keeping my fishing spot secret till kingdom come",
+            "your apple pie is goin' to the pigs this year",
+            "don't ask me to water your plants while you're gone",
+            "the church potluck just won't be the same",
+            "you're on your own come harvest time",
+            "I'm not saving you a seat at the county fair",
+            "that's how you know your jam won't set right",
+            "the wedding's moved to the next county over",
+            "there's no use fixing the screen door",
+            "you might as well eat dinner with the hogs",
+            "that fence ain't gonna mend itself",
+            "the collection plate's gonna pass you by",
+            "your name's comin' off the prayer list",
+            "you can count me out for the hayride",
+            "there'll be snow on the watermelon patch",
+            "don't bother bringing your famous casserole",
+            "the garden club membership is closed to you",
+            "your rhubarb pie ain't welcome at the social",
+            "the horse is already out of the barn",
+            "there's no use in crying over spilled buttermilk"
         ];
 
-        // Track used lines for each category
-        let usedFirstLines = [];
-        let usedSecondLines = [];
-        let usedThirdLines = [];
+        // Track used phrases for each column
+        let usedPhrases = {
+            column1: [],
+            column2: [],
+            column3: []
+        };
 
-        function getNextLine(array, usedLines) {
-            // If all lines have been used, reset the used lines array
-            if (usedLines.length >= array.length) {
-                usedLines.length = 0;
+        // Reset used phrases when all phrases in a column have been used
+        function resetUsedPhrases(column) {
+            usedPhrases[column] = [];
+        }
+
+        // Get a random phrase that hasn't been used recently
+        function getRandomPhrase(phrases, column) {
+            // If all phrases have been used, reset the used phrases for this column
+            if (usedPhrases[column].length >= phrases.length) {
+                resetUsedPhrases(column);
             }
 
-            // Get available lines (those not in usedLines)
-            const availableLines = array.filter(line => !usedLines.includes(line));
+            // Get available phrases (those not in usedPhrases)
+            const availablePhrases = phrases.filter(phrase => !usedPhrases[column].includes(phrase));
             
-            // Get random line from available lines
-            const randomIndex = Math.floor(Math.random() * availableLines.length);
-            const selectedLine = availableLines[randomIndex];
+            // Get random phrase from available phrases
+            const randomIndex = Math.floor(Math.random() * availablePhrases.length);
+            const selectedPhrase = availablePhrases[randomIndex];
             
-            // Add to used lines
-            usedLines.push(selectedLine);
+            // Add to used phrases
+            usedPhrases[column].push(selectedPhrase);
             
-            return selectedLine;
+            return selectedPhrase;
         }
 
-        function generateHaiku() {
-            const firstLine = getNextLine(firstLines, usedFirstLines);
-            const secondLine = getNextLine(secondLines, usedSecondLines);
-            const thirdLine = getNextLine(thirdLines, usedThirdLines);
+        // Function to generate a random response
+        function generateResponse() {
+            // Get random phrases from each column
+            const phrase1 = getRandomPhrase(column1, 'column1');
+            const phrase2 = getRandomPhrase(column2, 'column2');
+            const phrase3 = getRandomPhrase(column3, 'column3');
 
+            // Convert first letter of phrase1 to lowercase since it follows "Well, "
+            const lowercasePhrase1 = phrase1.charAt(0).toLowerCase() + phrase1.slice(1);
+
+            // Combine phrases with "Well, " at the start, a comma between phrase2 and phrase3, and a period at the end
+            const response = `Well, ${lowercasePhrase1} ${phrase2}, ${phrase3}.`;
+            
+            // Display the response
             const resultBox = document.getElementById('answer');
-            resultBox.innerHTML = `
-                <div class="haiku-line">${firstLine}</div>
-                <div class="haiku-line">${secondLine}</div>
-                <div class="haiku-line">${thirdLine}</div>
-            `;
-            resultBox.classList.add('show');
-            resultBox.classList.add('shake');
+            resultBox.textContent = response;
+            resultBox.style.display = 'block';
+        }
+
+        function shakeBall() {
+            const answer = document.getElementById('answer');
+            
+            // Add shake animation to the result box
+            answer.classList.add('shake');
+            
+            // Hide previous answer
+            answer.classList.remove('show');
+            
+            // Get random response
+            generateResponse();
+            
+            // Show new answer after animation
             setTimeout(() => {
-                resultBox.classList.remove('shake');
+                answer.classList.add('show');
+                answer.classList.remove('shake');
             }, 500);
         }
+
+        function askQuestion() {
+            const questionInput = document.getElementById('question');
+            if (questionInput.value.trim() !== '') {
+                shakeBall();
+            } else {
+                alert('Please enter a question first!');
+            }
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('question').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                askQuestion();
+            }
+        });
     </script>
 </body>
 </html> 
